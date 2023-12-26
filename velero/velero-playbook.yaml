@@ -1,0 +1,26 @@
+---
+ - name: velero install
+   hosts: master1
+    
+   tasks:
+    - name: copy package
+      copy: 
+        src: /root/velero/velero-v1.11.1-linux-amd64.tar.gz
+        dest: /root 
+    - name: Check file exists
+      stat:
+        path: /usr/local/bin/velero
+      register: file_stat
+
+    - name: unpackager file
+      shell: |
+        tar -xvf velero-v* 
+        cd velero-v1.11.1-linux-amd64
+        mv velero /usr/local/bin/
+      when: not file_stat.stat.exists
+
+    - name: copy velero install.sh
+      copy:
+        src: /root/velero/installvelero.sh
+        dest: /root
+        mode: '0755'
