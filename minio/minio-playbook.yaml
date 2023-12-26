@@ -1,0 +1,15 @@
+---
+ - name: create minio
+   hosts: minio
+
+   tasks:
+    - name: create directory  # minio directory 생성
+      ansible.builtin.file:
+        path: /home/minio/minio
+        state: directory
+    - name: copy docker-compose # docker file 복사
+      copy:
+        src: /root/minio/docker-compose.yaml
+        dest: /home/minio/minio/docker-compose.yaml
+    - name: run docker 
+      shell: cd /home/minio/minio/ &&  sudo docker-compose up -d
